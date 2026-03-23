@@ -2,63 +2,61 @@ import App from "./app.js";
 
 var vDOM;
 
-document.body.append(App());
-
-export function useState(value) {
-  function setState(newValue) {
-    value = newValue;
-
-    updateDOM();
-  }
-
-  return [value, setState];
-}
+render();
 
 export function createElement(type, props, ...children) {
-  vDOM = { type, props, children };
+  return { type, props, children };
+}
+
+export function render() {
+  // if (!vDOM) {
+    vDOM = App();
+
+    var convertedVDOM = convertNode(vDOM);
+
+    document.body.replaceChildren(convertedVDOM);
+  // }
+
+  // var previousVDOM = { ...vDOM };
+
+  // var currentVDOM = App();
+
+  // findDiff(previousVDOM, currentVDOM);
+}
+
+function findDiff(previous, current) {
+  current.children.forEach(function (el, index) {
+    if (JSON.stringify(el) != JSON.stringify(previous.children[index])) {
+      previous.children[index] = el;
+    }
+  });
+}
+
+function convertNode(node) {
+  if (typeof node == "string") {
+    var element = document.createElement("div");
+    element.textContent = node;
+    return element;
+  }
+
+  var element = document.createElement(node.type);
+
+  var props = Object.entries(node.props);
+
+  if (props.length > 0) {
+    props.forEach(function ([key, value]) {
+      element[key] = value;
+    });
+  }
+
+  var children = [];
+  node.children.forEach(function (el) {
+    children.push(convertNode(el));
+  });
+
+  element.replaceChildren(...children);
 
   return element;
 }
 
-function convertVDOM(vDOM) {
-  var convertedVDOM = vDOM.map(function create(element) {
-    return createElement(element);
-  });
-
-  return convertedVDOM;
-}
-
-function createVDOM() {}
-
-function updateDOM() {
-  vDOM.forEach(function ([key, value]) {
-    element[key] = value;
-  });
-
-  var element = document.createElement(type);
-
-  var props = Object.entries(props);
-
-  props.forEach(function ([key, value]) {
-    element[key] = value;
-  });
-
-  children.forEach(function insert(el) {
-    element.append(el);
-  });
-
-  var previousVDOM = { ...vDOM };
-
-  var currentVDOM = document;
-
-  findDiff(previousVDOM, currentVDOM);
-}
-
-function findDiff(previous, current) {
-  for (let i = 0; i < current.length; i++) {
-    if (JSON.stringify(previous[i]) != JSON.stringiy) {
-    }
-  }
-}
-
-render();
+// setInterval(updateDOM, 15)

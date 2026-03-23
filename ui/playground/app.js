@@ -1,4 +1,5 @@
-import { createElement, useState } from "./lib.js";
+import { createElement } from "./lib.js";
+import { useState } from "./useState.js";
 
 export default function App() {
   var [name, setName] = useState("");
@@ -16,4 +17,3 @@ export default function App() {
     }),
   );
 }
-
