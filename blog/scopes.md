@@ -9,15 +9,17 @@ Com o crescimento da IA, estamos colocando mais camadas de abstração no desenv
 dos devs não concordaria com a importância de aprender conceitos fundamentais como Scopes (aqui falo especificamente sobre Javascript, mas vale
 pra qualquer outra linguagem).
 
-Não lembro exatamente quando foi, mas acabei caindo na página do Student Pack do GitHub, no qual eu já utilizava alguns recursos como o Copilot e
-lembrei que, além dele, o GitHub oferece vários outros benefícios gratuitos: Créditos na Amazon, Free Domains, GitHub Actions,
-etc. Aproveitei pra verificar os conteúdos novamente, e um deles me chamou atenção. Eu já sabia da existência plataforma e já tinha visto alguns
+Estava pesquisando sobre certificações oficiais do GitHub e acabei caindo na página do Student Pack, no qual eu já utilizava alguns
+recursos como o Copilot e lembrei que, além dele, eles oferecem vários outros benefícios: Créditos na Amazon, Free Domains, GitHub
+Actions, etc. Aproveitei pra verificar os conteúdos novamente, e um deles me chamou atenção. Eu já sabia da existência plataforma e já tinha visto alguns
 conteúdos deles no Linkedin e no Youtube, mas não lembrava que eles possuíam uma parceria com o GitHub, falo do **FrontendMasters**.
 
 Sinceramente, eu acho que não existe conteúdo melhor na internet focado em Frontend do que o **FrontendMasters**. É um benefício
 oferecido pra qualquer estudante inscrito no GitHub Student Pack, por 6 meses, GRATUITAMENTE. Particularmente eu acho que todo estudante
 ou desenvolver Frontend deveria estudar o conteúdo oferecido por eles. O único porém é que a plataforma é toda em inglês e não possui legendas
 em português. De qualquer forma, eu acho que pra esse caso vale muito a pena o esforço de aprender a língua.
+
+Aqui está o link do Student Pack pra quem quiser dar uma olhada: https://education.github.com/pack
 
 Fiz essa tangente pois estudei e aprendi sobre Scopes no Javascript com um dos tutores mais incríveis da plataforma, **Kyle Simpson**,
 no workshop de **Deep Javascript Foundations**. Pessoalmente, eu acho a didática dele fantástica. E esse estudo vai ser baseado nos ensinamentos
@@ -26,8 +28,9 @@ como verdade absoluta e procuro questioná-los o máximo possível. O Kyle tem o
 particularmente considero isso como um dos pontos fortes da didática dele.
 
 Tem bastante coisa no qual ainda quero escrever sobre, mas a ideia dessa introdução foi dar um pouco mais de contexto a respeito desse estudo.
-Nesse sentido, vou separá-lo em dois temas: **Static Scoping** e **Dynamic Scoping**. Não existe dynamic scoping no Javascript, mas vou fazer dessa
-forma por que a keyword `this` é um dinamicismo na linguagem e vale um tópico separado.
+Vou separar Scoping em dois artigos diferentes: **Static Scoping** e **Dynamic Scoping**. Se eu falar sobre os dois nesse mesmo artigo, ele vai ficar
+gigantesco. Não existe dynamic scoping no Javascript, mas vou fazer dessa forma por que a keyword `this` é um dinamicismo na linguagem e vale
+um tópico separado.
 
 ## Disclaimer
 
@@ -275,94 +278,12 @@ Mesmo em Block Scope, a varíavel fica acessível ao escopo da function `foo`.
 Functions funcionam de maneira híbrida (Hybrid Scoped), tanto em Block Scope quanto em Function Scope. São assim por questões históricas de
 compatibilidade.
 
-#### let x var
-
-O Kyle faz um paratênses no workshop explicando que let não é uma substituição de var na linguagem, considerado bastante polêmico, no qual
-pessoalmente achei bem interessante. O que você mais vê em posts no Reddit de Javascript é essa discussão sobre qual keyword usar, que pode pode parecer
-inútil, mas o assunto vai além disso.
-
-No meu dia-a-dia, não usava `var` não por que não concordava com o uso, mas simplesmente por que tinha adotado `let` e `const` como hábito. Já vi
-gente relevante na internet afirmando que `var` é um anti-pattern e não deveria ser usado sem embasamento nenhum a respeito dessa afirmação.
-No geral, dizem que `var` ainda existe por questões históricas de compatibilidade e que era utilizado em aplicações que hoje são consideradas legado.
-
-De maneira nenhuma `let` pode ser considerado uma substituição de `var`. Se você resolver dar um search and replace na sua aplicação ou em qualquer
-projeto legado, a chance de seu programa quebrar é bem alta. Como explicado acima, `var` é Function Scoped. No exemplo, se você substituir `var` por
-`let`, ele vai retornar um ReferenceError, por que o identificador vai passar a ser Block Scoped, simples assim.
-
-> Então nesse caso vou subir a declaração de let pro nível da function e atribuir o valor a ela dentro do escopo de bloco.
-
-```javascript
-function foo() {
-  let bar;
-
-  {
-    bar = "bar";
-  }
-
-  console.log(bar); // prints bar
-}
-
-foo();
-```
-
-Não é mais fácil simplesmente deixar a declaração junto com o assignment usando `var`?
-
-`var` e `let` tem aplicações diferentes, é como dizer que uma banana e maçã são a mesma coisa por que os dois são frutas, é ilógico. É verdade
-que pra diversos casos eles funcionam de maneira similar. Se `let` está no nível do escopo da função, então ele funciona como `var`. Mas por que
-não usar `var` logo? Esse seria o tipo de declaração correta nesse caso. Usar `let` vai indicar um erro semântico da keyword.
-
-Se você precisa de um escopo de bloco, usa o `let` (ou o `const`), se precisa de um escopo de função, usa o `var`, um não é substituto do outro.
-Existem outros casos além do que citei com expressões de try/catch, while, condicionais, etc, mas não vou exemplificar todas elas por que daria um
-conteúdo enorme só a respeito disso, o que seria bem cansativo.
-
-Honestamente, antes eu não sabia de nada disso e só não usava `var`, mas nunca critiquei o não uso sem ter embasamento. Quando aprendi, passei a
-aplicar nos meus projetos com mais frequência. O problema é que a grande maioria dos desenvolvedores não o usam por que virou
-senso comum. A mesma situação se aplica pro uso de arrow functions. Arrow functions passaram a ser o novo "padrão" pra declaração
-de functions na linguagem e perderam seu propósito. Arrow functions foram implementadas pra resolver o this lexicamente, não pra substituir qualquer
-tipo de function. Eu mesmo só utiliza arrow functions por puro hábito.
-
-Kyle bate bastante nesse martelo e reforça que nós desenvolvedores devemos conhecer as ferramentas que estão ao nosso dispor. Não estou dizendo que 
-você deve adotar `var`, mas que deveríamos conhecer mais nossas ferramentas, e eu concordo com ele nesse sentido. O que eu acho errado é espalhar 
-desinformação como verdade absoluta. Eu dúvido muito que essas pessoas, se questionadas, saberiam explicar o real motivo de não usar `var`. O Javascript 
-é uma linguagem criticada por diversos motivos, que eu concordo, mas casos como esse parecem ser só desconhecimento ou ignorância.
-
-Desenvolvedores que de fato sabem as diferenças e as aplicações possuem argumento relevantes do por que não usar var, nos quais eu acho válido.
-O uso de var é mais suscetível a erros inesperados. Com `var`, você pode fazer redeclaração da variável, se alguém decidir utilizar o mesmo label,
-a variável vai ser sobrescrita. Já let e const tem Strictly behavior, se você tentar redeclarar a variável ele vai dar erro no processo de compilação
-,como mencionei mais acima. Particularmente eu nunca tive esse tipo de problema nos projetos que colaborei, mas é um argumento válido.
-
-Passei a adotar o uso do var com algumas ressalvas, justamente por esses tipos de problemas inesperados. Não sou defensor absoluto do uso delas,
-também concordo com algumas desvantagens a respeito do uso da keyword. Mas de maneira geral, é imprescindível que nós, como desenvolvedores, saibamos
-a diferença das ferramentas que estão ao nosso dispor. Esse é o ponto central de discussão que o Kyle coloca na mesa.
-
-Ferramentas como Typescript e Eslint também sinalizam erros de reatribução e redeclaração pra const e let em tempo de desenvolvimento, no qual
-facilita a prevenção desses erros inesperados.
-
-Antes, eu não sabia de nada disso e só não usava var. Mas nunca critiquei o não uso por que não sabia como funcionava por debaixo dos panos. Depois que
-estudei a respeito, passei a usar var em todos os casos semânticos e aplicáveis. O Problema é que 99% dos desenvolvedores javascript não utiliza var.
-
-Uma das implicações em cima de var é que ele é muito sucetível a erros. Por exemplo se você vai declarar uma varíável com mesmo nome, substituindo o
-valor anterior. Particularmente isso nunca aconteceu comigo, procuro deixar a minhas funções sempre enxutas a ponto de eu conseguir enxergar ela na
-minha tela.
-
-Além disso, reassignment de variáveis não é possível com let e com const. o Kyle defende que reassignment poderia ser bom se a função for muito grande,
-pra você não subir tanto no bloco de código.
-
-Pelos desenvolvedores não utilizarem var e let da maneira semântica, é bem dificil mudar a cultura de utilização de let pra usar var.
-
-Mesmo com todos esses pontos, eu ainda sim não adotei o uso do var de maneira geral, ainda tenho alguns pé atrás com o mesmo. Vejo que a aplicação
-semântica não é tão benéfica pra evitar alguns erros bobos. Ferramentas como typescript sinalizar let e const de serem re-assigned ou re-declared.
-
-É dificil mudar a cultura de uso de let pra var, assim como é difícil falar para um dev não utilizar arrow functions, pois são functions anonimas que
-dificultam no Debug (assunto que quero discutir em outro post).
-
 ### Hoisting
 
-Hoisting é um termo bastante comum pra explicar o comportamento de inicialização de Escopos e identificadores pelo Compiler. É um termo que não existe na
-especificação do Javascript.
+Hoisting é um termo bastante comum que é usado pra resumir o que expliquei previamente. É um termo que não existe na especificação do Javascript.
 
-Um identificador, no processo de Compilação, tem comportamentos diferentes com base no seu tipo de declaração. Há um equívoco comum em achar
-que keywords como const e let não são "Hoisteados". Todo identificador é "Hoisteado", o que muda é seu comportamento.
+var, let, const e functions são Hoisteados de maneiras diferentes. Há um equívoco comum em achar que keywords como const e let não são "Hoisteados".
+Pra facilitar, exemplos de caso de Hositing são mais relacionados ao acesso desses identificadores antes da sua declaração.
 
 - **Function Declarations**: são inicializadas
 - **var**: inicializados com o valor `undefined`.
@@ -407,6 +328,70 @@ faria sentido lermos uma constante com o valor de `undefined` antes de sua decla
 > do código primeiro do que o corpo da function. No caso de var, realmente não vejo muito caso pratico em querer acessar uma variável antes da sua
 > declaração. De qualquer maneira, acho importante entender primeiro como a linguagem funciona, e utilizar as funcionalidades que fazem sentido pro
 > seu caso.
+
+#### let x var
+
+O Kyle faz um paratênses no workshop explicando que let não é uma substituição de var na linguagem, considerado bastante polêmico, no qual
+pessoalmente achei bem interessante. O que você mais vê em posts no Reddit de Javascript é essa discussão sobre qual keyword usar, que pode pode parecer
+inútil, mas o assunto vai além disso.
+
+No meu dia-a-dia, não usava `var` não por que não concordava com o uso, mas simplesmente por que tinha adotado `let` e `const` como hábito. Já vi
+gente relevante na internet afirmando que `var` é um anti-pattern e não deveria ser usado sem embasamento nenhum a respeito dessa afirmação.
+No geral, dizem que `var` ainda existe por questões históricas de compatibilidade e que era utilizado em aplicações que hoje são consideradas legado.
+
+De maneira nenhuma `let` pode ser considerado uma substituição de `var`. Se você resolver dar um search and replace na sua aplicação ou em qualquer
+projeto legado, a chance de seu programa quebrar é bem alta. Como explicado acima, `var` é Function Scoped. No exemplo, se você substituir `var` por
+`let`, ele vai retornar um ReferenceError, por que o identificador vai passar a ser Block Scoped, simples assim.
+
+> Então nesse caso vou subir a declaração de let pro nível da function e atribuir o valor a ela dentro do escopo de bloco.
+
+```javascript
+function foo() {
+  let bar;
+
+  {
+    bar = "bar";
+  }
+
+  console.log(bar); // prints bar
+}
+
+foo();
+```
+
+Não é mais fácil simplesmente deixar a declaração junto com o assignment usando `var`?
+
+`var` e `let` tem aplicações diferentes, é como dizer que uma banana e maçã são a mesma coisa por que os dois são frutas, é ilógico. É verdade
+que pra diversos casos eles funcionam de maneira similar. Se `let` está no nível do escopo da função, então ele funciona como `var`. Mas por que
+não usar `var` logo? Usar `let` vai indicar um erro semântico da keyword.
+
+Se você precisa de um escopo de bloco, usa o `let` (ou o `const`), se precisa de um escopo de função, usa o `var`, um não é substituto do outro.
+Existem outros casos além do que citei com expressões de try/catch, while, condicionais, etc, mas não vou exemplificar todas elas por que daria um
+conteúdo enorme só a respeito disso, o que seria bem cansativo.
+
+Honestamente, antes eu não sabia de nada disso e só não usava `var`, mas nunca critiquei o não uso sem ter embasamento. Quando aprendi, passei a
+aplicar nos meus projetos com mais frequência. O problema é que a grande maioria dos desenvolvedores não o usam por que virou
+senso comum. A mesma situação se aplica pro uso de arrow functions. Arrow functions passaram a ser o novo "padrão" pra declaração
+de functions na linguagem e perderam seu propósito. Arrow functions foram implementadas pra resolver o `this` lexicamente, não pra substituir qualquer
+tipo de declaração de function. Eu mesmo só utiliza arrow functions por puro hábito.
+
+Kyle bate bastante nesse martelo e reforça que nós desenvolvedores devemos conhecer as ferramentas que estão ao nosso dispor. Não estou dizendo que
+você deve adotar `var`, mas que deveríamos entender seu propósito, e eu concordo com ele nesse sentido. O que eu acho errado é espalhar
+desinformação como verdade absoluta. Eu dúvido muito que essas pessoas, se questionadas, saberiam explicar o real motivo de não usar `var`.
+O Javascript é uma linguagem criticada por diversos motivos, que eu concordo, mas casos como esse parecem ser só desconhecimento ou ignorância.
+
+Existem argumentos relevantes do porque não usar var. O uso de var é mais suscetível a erros inesperados. Com `var`, você pode fazer redeclaração
+da variável, se alguém decidir utilizar o mesmo label, a variável vai ser sobrescrita. Entretando, redeclarar uma varíavel no mesmo escopo pode ser
+necessário pro seu caso. Já let e const tem Strictly Behavior, se você tentar redeclarar a variável ele vai dar erro em tempo de compilação.
+
+Outro ponto é que, por causa do Hoisting como mencionei, var são inicializados com o valor undefined na Compilation Phase, ou seja, se você tentar
+acessar var antes da sua declaração, ele vai te retornar undefined. Já let e const permanecem uninicializados, como falei sobre TDZ
+
+Ferramentas como Typescript e Eslint também sinalizam erros de reatribução e redeclaração pra const e let em tempo de desenvolvimento, diferentemente
+de var, no qual facilita a prevenção desses erros inesperados.
+
+Ainda hoje tenho ressalvas no uso do var, por que frameworsk como React, impoem seus próprios padrões e usar var em muitos casos acaba confundindo
+outros devs. No geral o problema também é a cultura em volta do Javascript.
 
 ## 2. Runtime
 
@@ -464,6 +449,11 @@ históricas de compatibilidade da linguagem.
 
 O objeto console também é buscado como uma Source Reference pelo Runtime x Scope Manager, a não que você o sobrescreva. O console, assim como outros
 objetos builtin do Javascript, são globais.
+
+### Conclusão
+
+Esse artigo já ficou bem grande, a parte de let x var ocupou um bom tempo mais achei que valeria a pena comentar mais sobre.
+falar sobre closures e uma prévia de dynamic scoping com this
 
 ##### Sobre Closures
 
